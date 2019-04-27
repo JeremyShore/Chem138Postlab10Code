@@ -2,12 +2,11 @@
 % Developer:Jeremy Shore. All Rights Reserved.
 % Date: 26 April 2019
 
-% the following code is for a school assingment.
-% Anny Academic dishonesty from this code is unintentional and
-% not my responsibility to deal with.
-% God bless you et Ad Gloriam Majoram
-
 %% example wavelengths, absorbances, and other crap from my lab assignment
+% Below are the measurenet data files in full for each solution (called
+% "vial"). vial1, for example, has the absorbance data from the cuvette
+% that had only solution 1 in it. Vial1HCl is the absorbance data for the
+% solution when the HCl was added to it in part b.
 
 vial1 = [179.58	 0	1	-4
 179.58	 0	1	-4
@@ -8209,10 +8208,15 @@ vial4HCl = [179.58	 0	1	0
 879.79	 .049	177	158
 879.79	 .049	177	158];
 
+%% The Math for things - w is just the list of wavelengths that the NetSpec shot though the solutions
 w = vial1(:,1); %wavelengths
 
-vial1abs = vial1(:,2);
-vial1HClabs = vial1HCl(:,2);
+% ***** part B stuff *****
+% all of the absorbance values for each solution (from part B of lab)
+% abs is short for absorbance HCl refers to the solution with HCl in it
+
+vial1abs = vial1(:,2); % example: vial 1 absorbances
+vial1HClabs = vial1HCl(:,2); % example: vial 1 but with HCl absorbances
 
 vial2abs = vial2(:,2);
 vial2HClabs = vial2HCl(:,2);
@@ -8223,20 +8227,32 @@ vial3HClabs = vial3HCl(:,2);
 vial4abs = vial4(:,2);
 vial4HClabs = vial4HCl(:,2);
 
-%% Beer's Law graph values
-beer_molarities = [1.29.*(10.^(-4)), 6.47.*(10.^(-4)), 3.23.*(10.^(-5)), 8.08.*(10.^(-6))];
-beer_absorbances = [.381, .171, .082, .010];
+%% Beer's Law graph values 
+% ***** Part C stuff *****
+beer_molarities = [1.29.*(10.^(-4)), 6.47.*(10.^(-4)), 3.23.*(10.^(-5)), 8.08.*(10.^(-6))]; % concentrations from part c
+beer_absorbances = [.381, .171, .082, .010]; % absorbances from part C
+
 % will be graphed below
 beers_law_line = polyfit(beer_molarities, beer_absorbances, 1);
-beers_law_slope = polyder(beers_law_line);
+beers_law_slope = polyder(beers_law_line); % the Absorptivity (epsilon) in the Beer's Law equation (the e in A = e*c*b)
 
-%% Finding max absorption wavelengths for Br/Ag ratios 
-%Finding max value for each absorbance
+%% Finding max absorption wavelengths for Br/Ag ratios (one of the Graphs calculations requirements)
+
+% ***** part B Stuff *****
+%Finding max absorbance for each wavelength for the vials only - not HCl
+%solutions
 max_abs = zeros(1,length(vial1abs));
 for i = 1:(length(vial1abs))
-    max_abs(i) = max([vial1(i,2), vial1HCl(i,2), vial2(i,2), vial2HCl(i,2), vial3(i,2), vial3HCl(i,2), vial4(i,2), vial4HCl(i,2)]);    
+    max_abs(i) = max([vial1(i,2), vial2(i,2), vial3(i,2), vial4(i,2)]);    
 end
 
+%% Finding the Wavelengths that produce the highest absorbances in each vial
+% Each loop below goes through all of the absorbances of the list of
+% absorbances in each vial and checks to see if it is equal to the bigges
+% absorbance in that list. If the current absorbance is equal to the
+% largest one in the list, then the loop indexes the data file for the
+% wavelength that corresponds to that absorbance, and this is the
+% wavelength that produces the highest absorbance in the vial
 
 % vial1
 max_abs_wav_vial1 = 0
@@ -8247,6 +8263,7 @@ for i = 1:length(vial1abs)
     end
 end
 
+%{
 max_abs_wav_vial1HCl = 0
 max_abs_vial1HCl = max(vial1HCl(:,2));
 for i = 1:length(vial1HClabs)
@@ -8254,6 +8271,7 @@ for i = 1:length(vial1HClabs)
         max_abs_wav_vial1HCl = vial1HCl(i,1);
     end
 end
+%}
 
 max_abs_wav_vial2 = 0
 max_abs_vial2 = max(vial2(:,2));
@@ -8263,6 +8281,7 @@ for i = 1:length(vial2abs)
     end
 end
 
+%{
 max_abs_wav_vial2HCl = 0
 max_abs_vial2HCl = max(vial2HCl(:,2));
 for i = 1:length(vial2HClabs)
@@ -8270,6 +8289,7 @@ for i = 1:length(vial2HClabs)
         max_abs_wav_vial2HCl = vial2HCl(i,1);
     end
 end
+%}
 
 max_abs_wav_vial3 = 0
 max_abs_vial3 = max(vial3(:,2));
@@ -8279,6 +8299,7 @@ for i = 1:length(vial3abs)
     end
 end
 
+%{
 max_abs_wav_vial3HCl = 0
 max_abs_vial3HCl = max(vial3HCl(:,2));
 for i = 1:length(vial3HClabs)
@@ -8286,6 +8307,7 @@ for i = 1:length(vial3HClabs)
         max_abs_wav_vial3HCl = vial3HCl(i,1);
     end
 end
+%}
 
 max_abs_wav_vial4 = 0
 max_abs_vial4 = max(vial4(:,2));
@@ -8295,6 +8317,7 @@ for i = 1:length(vial4abs)
     end
 end
 
+%{
 max_abs_wav_vial4HCl = 0
 max_abs_vial4HCl = max(vial4HCl(:,2));
 for i = 1:length(vial4HClabs)
@@ -8302,6 +8325,7 @@ for i = 1:length(vial4HClabs)
         max_abs_wav_vial4HCl = vial4HCl(i,1);
     end
 end
+%}
 
 % molar ratios of Br/Ag
 vial1ratio = 0;
@@ -8317,15 +8341,15 @@ max_abs_wavs = [max_abs_wav_vial1, max_abs_wav_vial2, max_abs_wav_vial3, max_abs
 
 
 %% Graphs
-% Plot for the absorbances for vials 1 - 4
+% Plot for the absorbances for vials 1 - 4 absorbances versus wavelengths
 subplot(2,4,1)
-plot(w,vial1abs,w,vial2abs,w,vial3abs,w,vial4abs)
+plot(w,vial1abs,'g',w,vial2abs,'b',w,vial3abs,'y',w,vial4abs,'r')
 title('Figure 1: Absorbances Vs. Wavelengths')
 xlabel('wavelengths (nm)')
 ylabel('absorbance')
 legend({'vial1','vial2','vial3','vial4'},'location','southeast')
 
-% Plot for vial1 and vial1HCl
+% Plot for vial1 and vial1HCl absorbances versus wavelengths
 subplot(2,4,2)
 plot(w,vial1abs,w,vial1HClabs)
 title('Figure 2: Vial1 and Vial1HCl')
@@ -8333,7 +8357,7 @@ xlabel('wavelengths (nm)')
 ylabel('absorbances')
 legend({'vial1','vial1HCl'},'location','southeast')
 
-%Plot for vial2 and vial2HCl
+%Plot for vial2 and vial2HCl absorbances versus wavelengths
 subplot(2,4,3)
 plot(w,vial2abs,w,vial2HClabs)
 title('Figure 3: Vial2 and Vial2HCl')
@@ -8341,7 +8365,7 @@ xlabel('wavelengths (nm)')
 ylabel('absorbances')
 legend({'Vial2','Vial2HCl'},'location','southeast')
 
-%Plot for vial3 and vial3HCl
+%Plot for vial3 and vial3HCl absorbances versus wavelengths
 subplot(2,4,4)
 plot(w,vial3abs,w,vial3HClabs)
 title('Figure 4: Vial3 and Vial3HCl')
@@ -8349,7 +8373,7 @@ xlabel('wavelengths (nm)')
 ylabel('absorbances')
 legend({'vial3','vial3HClabs'},'location','southeast')
 
-%Plot for vial4 and vial4HCl
+%Plot for vial4 and vial4HCl absorbances versus wavelengths
 subplot(2,4,5)
 plot(w,vial4abs,'r',w,vial4HClabs,'b')
 title('Figure 5: Vial4 and Vial4HCl')
@@ -8363,6 +8387,8 @@ scatter(beer_molarities, beer_absorbances,'bo')
 hold on
 plot(beers_law_line) % the polynomial to get slope
 hold off
+ylim([0 1])
+xlim([0 10^(-3)])
 title('Figure 6: Beers Law Line')
 xlabel('concentrations')
 ylabel('Absorbances')
@@ -8370,32 +8396,35 @@ ylabel('Absorbances')
 %A graph that shows the maximum absorption wavelength vs. the Br/Ag molar ratio for the vials. 
 subplot(2,4,7)
 scatter(max_abs_wavs, vialratios, length(max_abs_wavs))
-title('Figure 7: Maximum Absorption Wavelengths Vs. Molar Ratios of Vials')
+title('Figure 7: Max Absorption Wavelengths Vs. Molar Ratios')
 xlabel('Max Absorption Wavelengths (nm)')
 ylabel('Molar Ratios')
 
 % test values to print
 "Max Waves vial 1 and vial 1 HCl"
 max_abs_wav_vial1
-max_abs_wav_vial1HCl
+% max_abs_wav_vial1HCl
 
 "Max Waves vial 2 and vial 2 HCl"
 max_abs_wav_vial2
-max_abs_wav_vial2HCl
+% max_abs_wav_vial2HCl
 
 "Max Waves vial 3 and vial 3 HCl"
 max_abs_wav_vial3
-max_abs_wav_vial3HCl
+% max_abs_wav_vial3HCl
 
 "Max Waves vial 4 and vial 4 HCl"
 max_abs_wav_vial4
-max_abs_wav_vial4HCl
+% max_abs_wav_vial4HCl
 
 "Beer's Law points slope, which is the epsilon:"
 beers_law_slope
 
+"Beer's Law line"
+beers_law_line
 
-
+"Beer Molarities"
+beer_molarities
 
 
 
